@@ -1,12 +1,11 @@
-import { useState } from 'react';
+import { useState } from 'react'; //useState es un hook de React que permite manejar el estado de variables (como los registros).
 import './index.css';
 
 const memoriaInicial = [
-  { dir: '0000', bin: '00000100' }, // LOAD
-  { dir: '0001', bin: '00000101' }, // ADD
-  { dir: '0010', bin: '00000110' }, // STORE
-  { dir: '0011', bin: '00000111' }, // SUB
-  { dir: '0100', bin: '00001000' }, // STORE
+  { dir: '0000', bin: '00000100' }, // LOAD 4
+  { dir: '0001', bin: '00010101' }, // ADD 5
+  { dir: '0011', bin: '00110111' }, // SUB 7
+  { dir: '0010', bin: '00100110' }, // STORE 
 ];
 
 const components = ['Memoria', 'Unidad de Control', 'ALU', 'CPU'];
@@ -18,22 +17,24 @@ const instructions = [
 ];
 
 export default function App() {
-  const [pc, setPc] = useState(0);
-  const [ir, setIr] = useState('');
-  const [acc, setAcc] = useState(0);
-  const [entrada, setEntrada] = useState(0);
-  const [mem, setMem] = useState(memoriaInicial);
+  const [pc, setPc] = useState(0);                // Contador de programa
+  const [ir, setIr] = useState('');               // Registro de instrucción
+  const [acc, setAcc] = useState(0);              // Acumulador
+  const [entrada, setEntrada] = useState(0);      // Entrada hacia la ALU
+  const [mem, setMem] = useState(memoriaInicial); // Estado de la memoria
 
-  const [step, setStep] = useState(0);
-  const [history, setHistory] = useState([]);
+  const [step, setStep] = useState(0);            // Paso actual del ciclo de instrucción
+  const [history, setHistory] = useState([]);     // Historial de instrucciones ejecutadas
 
   const ejecutar = () => {
-    if (pc >= mem.length || step >= instructions.length) return;
+    if (pc >= mem.length || step >= instructions.length) return;  //Verifica si ya se completaron todas las instrucciones
 
+    // Se extrae la instrucción binaria
     const instruccion = mem[pc].bin;
     setIr(instruccion);
-    const valor = parseInt(instruccion.slice(4), 2);
-    const op = instruccion.slice(0, 4);
+    // Esta parte separa la instrucción
+    const valor = parseInt(instruccion.slice(4), 2); // Operando (últimos 4 bits)
+    const op = instruccion.slice(0, 4);              // Código de operación (primeros 4 bits)
 
     let nuevoAcc = acc;
 
